@@ -5,11 +5,18 @@ class Document(object):
     def __init__(self, path):
         self.path = path
         self.file = open(path, "a")
+        self.write("<!DOCTYPE html>\n<head></head>\n<body>\n")
+        self.js = "<script>\n"
 
     def write(self, input):
         self.file.write(input)
 
+    def scriptWrite(self, id):
+        pass
+
     def close(self):
+        self.js = self.js + "</script>"
+        self.write("</body>\n" + self.js + "\n</html>")
         self.file.close()
 
 class Item(object):
