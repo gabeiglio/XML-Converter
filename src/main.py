@@ -1,3 +1,4 @@
+import uuid
 import xml.etree.ElementTree as et
 
 # TODO: Create object wrapper for better manipulation and customization of css properties for now
@@ -6,25 +7,33 @@ class Document(object):
         self.path = path
         self.file = open(path, "a")
         self.write("<!DOCTYPE html>\n<head></head>\n<body>\n")
-        self.js = "<script>\n"
 
     def write(self, input):
         self.file.write(input)
 
-    def scriptWrite(self, id):
-        pass
+    def script(self):
+        self.write("<script>\n")
+
+        #looping through all ids and adding the respective js code
+        #"document.getElementById(\"{}\").value".format(id)
+
+        self.write("</script>")
+
+    def addButtonExportXML(self):
+        self.write("<button type=\"button\">Export to XML</button>")
 
     def close(self):
-        self.js = self.js + "</script>"
-        self.write("</body>\n" + self.js + "\n</html>")
+        self.addButtonExportXML()
+        self.write("</body>\n</html>")
         self.file.close()
 
 class Item(object):
     def __init__(self, item):
         self.item = item
+        self.uuid = uuid.uuid4()
 
     def htmlTerminal(self, scope):
-        result = printScope(scope) + "<div style=\"margin: 20px;\">\n" + printScope(scope + 1) + "<p>{}</p>\n".format(self.item.tag) + printScope(scope + 1) + "<input type=\"text\" id=\"{}\" style=\"height: 100px; width: 100%;\">\n".format("some unique id") + printScope(scope) + "</div>\n"
+        result = printScope(scope) + "<div style=\"margin: 20px;\">\n" + printScope(scope + 1) + "<p>{}</p>\n".format(self.item.tag) + printScope(scope + 1) + "<input type=\"text\" id=\"{}\" style=\"height: 100px; width: 100%;\">\n".format(self.uuid) + printScope(scope) + "</div>\n"
         return result
 
     def htmlContainer(self, scope):
@@ -49,7 +58,7 @@ def traverse(root, scope, document):
 
 def compileHTML(xml_file):
     # TODO: later change to function argument
-    tree = et.parse("/Users/gabeiglio/Developer/XML-Converter/tests/test1.xml")
+    tree = et.parse(r"C:\Users\gigliozzi\Desktop\XML-Converter\tests\test1.xml")
     root = tree.getroot()
 
     # TODO: grab name of input file and create file output with same name
